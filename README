@@ -1,0 +1,16 @@
+Name: Samuel Kotlyar
+ID: 110867641
+CSE 363
+
+Homework 4
+
+Part 1: Shellcode Injection
+The key to the shellcode injection was to find a shellcode that would not be mangled by the binary. I saw that I needed to find a shellcode that didn't include the characters between '0x68' and '0x6e'. I also excluded the null-byte (0x00) because strcpy would stop copying the shellcode when it sees it. I generated this shellcode using msfvenom.
+
+Next, I determined how large my input needs to be in order to override the return address. I noticed that at input less than 268 resulted in a valid program execution, greater than 268 resulted in a Seg Fault, and an input of exactly 268 resulted in an Illegal Argument. Thus, the return address that I needed to replace started at byte 268 of the buffer.
+
+In order to generate the exploit, I concatenated the generated shellcode to a long NOP sled and before the return address: NOP Sled + SC + Return address. The return address was some point in the NOP sled in little endian format. This didn't work at first. After running the exploit in radare, I discovered that there was a '0x09' byte that got mysteriously converted into a null byte, messing up the shellcode. I generated a new shellcode excluding the 0x09 byte as well. Additionally, the shellcode that we had seemed to push things onto the stack, overriding the shellcode. So I included a small NOP sled after the shellcode as well.
+
+Thus, the exploit became: NOP Sled + Shell Code + Small NOP Sled + Return Address. This didn't work either, but as per Professor Polychronakis's advice on Piazza, after adding more copies of return addresses (25 to be precise), I was able to get a shell.
+
+Final Exploit: NOP Sled (138 bytes) + Shell Code (70 bytes) + NOP Sled (48 bytes) + Return Address (25*4 bytes).
