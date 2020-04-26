@@ -4,6 +4,16 @@ CSE 363
 
 Homework 4
 
+Directions on how to run:
+
+- Create a user and switch to them as per the homework document.
+- Create the binaries: 'make' (You can remove them with 'make clean')
+- Run vuln1: 'python part1.py'
+- Run vuln2: 'python part2.py'
+
+
+Explanations:
+
 Part 1: Shellcode Injection
 The key to the shellcode injection was to find a shellcode that would not be mangled by the binary. I saw that I needed to find a shellcode that didn't include the characters between '0x68' and '0x6e'. I also excluded the null-byte (0x00) because strcpy would stop copying the shellcode when it sees it. I generated this shellcode using msfvenom.
 
