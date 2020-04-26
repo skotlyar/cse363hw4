@@ -14,3 +14,9 @@ In order to generate the exploit, I concatenated the generated shellcode to a lo
 Thus, the exploit became: NOP Sled + Shell Code + Small NOP Sled + Return Address. This didn't work either, but as per Professor Polychronakis's advice on Piazza, after adding more copies of return addresses (25 to be precise), I was able to get a shell.
 
 Final Exploit: NOP Sled (138 bytes) + Shell Code (70 bytes) + NOP Sled (48 bytes) + Return Address (25*4 bytes).
+
+Part 2: Ret2libc
+For this exploit, based on the class lecture notes, I had to call the system function with a "/bin/sh" argument. Thus, I overflowed the buffer, replacing the return address with the "system" address in libc. Next, I loaded the address to the exit function in libc, indicating that the system function should gracefully exit after terminating. Finally, I found where the string "/bin/sh" is referenced in libc and loaded it as an argument. I used readelf and the find function in gdb to find the three addresses.
+
+Thus, my exploit was formatted as follows:
+Junk (264 bytes) + Call to system (4 bytes) + Call to exit (4 bytes) + Address of string "/bin/sh" (4 bytes).
